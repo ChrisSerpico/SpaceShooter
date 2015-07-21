@@ -9,7 +9,8 @@ public class CameraController : MonoBehaviour {
     public float rotationSpeed = 1.0f;
 
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+    {
         float rotation = Input.GetAxis("Mouse X"); // get the amount of x-input
         transform.Rotate(0, rotation * rotationSpeed, 0);
 	}

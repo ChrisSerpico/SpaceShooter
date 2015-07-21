@@ -8,20 +8,40 @@ public class PlayerController : MonoBehaviour {
     // multiplicative speed modifier
     public float speed = 0.5f;
 
+    // strength of gravity on the player
+    public float gravity = 1f;
+
 	// Use this for initialization
 	void Start () {
 	
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        float horizontal = Input.GetAxis("Horizontal");  // Left and Right
-        float vertical = Input.GetAxis("Vertical");  // Forward and Back
+	void Update () 
+    {
+        // get the character controller of the player
+        CharacterController cc = GetComponent<CharacterController>();
 
-        // get the rigidbody of the player
-        Rigidbody rb = GetComponent<Rigidbody>();
+        // single vector for all movement
+        Vector3 moveDir = Vector3.zero; // initialize to zero vector
 
-        rb.MovePosition(transform.position + (transform.forward * speed * vertical) + (transform.right * speed * horizontal));
-        //rb.MovePosition(transform.position + (transform.right * speed * horizontal));
+        // only move laterally if the player is on the ground
+        if (cc.isGrounded)
+        {
+            // Get lateral input
+            float horizontal = Input.GetAxis("Horizontal");  // Left and Right
+            float vertical = Input.GetAxis("Vertical");  // Forward and Back
+
+            // combine the two movement axes into a single vector
+            moveDir = new Vector3(horizontal, 0, vertical);
+            moveDir = transform.TransformDirection(moveDir);
+            moveDir *= speed;
+        }
+
+        // gravity
+        moveDir.y -= gravity * Time.deltaTime;
+
+        // finally, move the player
+        cc.Move(moveDir);
 	}
 }
