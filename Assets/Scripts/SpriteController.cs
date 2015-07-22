@@ -10,6 +10,11 @@ public class SpriteController : MonoBehaviour
     // Update is called once per frame
 	void Update () 
     {
+        if (lookAt == null)
+        {
+            lookAt = GameObject.Find("Player").transform;
+        }
+
         transform.LookAt(new Vector3(lookAt.position.x, transform.position.y, lookAt.position.z));
 	}
 }
