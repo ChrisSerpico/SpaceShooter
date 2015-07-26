@@ -43,5 +43,16 @@ public class PlayerController : MonoBehaviour {
 
         // finally, move the player
         cc.Move(moveDir);
+
+        // let the player scroll to select items
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+
+        // get the player's inventory script
+        Inventory inv = GetComponent<Inventory>();
+
+        if (scroll < 0)
+            inv.SelectDown();
+        else if (scroll > 0)
+            inv.SelectUp();
 	}
 }
