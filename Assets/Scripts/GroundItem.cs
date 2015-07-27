@@ -6,7 +6,10 @@ public class GroundItem : MonoBehaviour {
     // generic ground item class, makes them bounce and allows them to be picked up
     // this only represents items in the game world
 
-	// Use this for initialization
+	// the cooldown of this item when picked up and used by the player
+    public int cooldown = 60;
+    
+    // Use this for initialization
 	void Start () {
         // make the item bounce
         // uses GoKit! Google it for documentation
@@ -14,11 +17,6 @@ public class GroundItem : MonoBehaviour {
         GoSpline path = new GoSpline(points);
 
         Go.to(transform, 2f, new GoTweenConfig().positionPath(path, true).setIterations(-1));
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
 	}
 
     // items are picked up when a player with inventory space comes into contact with it
