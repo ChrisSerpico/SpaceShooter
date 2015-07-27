@@ -50,9 +50,16 @@ public class PlayerController : MonoBehaviour {
         // get the player's inventory script
         Inventory inv = GetComponent<Inventory>();
 
+        // select items
         if (scroll < 0)
             inv.SelectDown();
         else if (scroll > 0)
             inv.SelectUp();
+
+        // use items
+        float click = Input.GetAxis("Fire1");
+
+        if (click == 1)
+            inv.UseSelected();
 	}
 }

@@ -15,9 +15,16 @@ public class HeldItem : MonoBehaviour {
         img = image;
     }
 
-    // image get
+    // get the sprite image
     public Sprite GetImg()
     {
         return img;
+    }
+
+    // use this item
+    // can be extended by child classes
+    public virtual void Use()
+    {
+        Debug.Log("Item \"" + this.name + "\" was used.");
     }
 }

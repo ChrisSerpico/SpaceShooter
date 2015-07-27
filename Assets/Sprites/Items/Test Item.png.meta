@@ -1,10 +1,11 @@
 fileFormatVersion: 2
 guid: 51c1144730676674981b086e98486b93
-timeCreated: 1437518733
+timeCreated: 1438021296
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: Items_0
+    21300002: Items_1
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -54,6 +55,16 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Items_1
+      rect:
+        serializedVersion: 2
+        x: 16
         y: 0
         width: 16
         height: 16

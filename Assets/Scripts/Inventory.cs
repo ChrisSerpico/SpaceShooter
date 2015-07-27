@@ -92,17 +92,46 @@ public class Inventory : MonoBehaviour {
     }
 
     // draw items in inventory on screen
+    // WARNING: This method currently uses a ton of magic numbers.
+    //          Eventually, I'd like to go through it and clean it up,
+    //          but for now just consider yourself warned
     void OnGUI()
     {
+        // GUIstyle for centering text
+        GUIStyle centeredText = GUI.skin.GetStyle("Box");
+        centeredText.alignment = TextAnchor.MiddleCenter;
+
+        // Draw a box in the bottom right that shows what item the player has equipped 
+        GUI.Box(new Rect(Screen.width - 152, Screen.height - 152, 144, 144), "");
+
         for (int i = 0; i < currentItems; i++)
         {
             // temporary item variable
             HeldItem temp = inv[i].GetComponent<HeldItem>();
+
+            // draw all items in upper left-hand corner
             GUI.DrawTexture(new Rect(8, 8 + i * 36, 32, 32), temp.GetImg().texture);
             if (i == selectedItem)
             {
-                GUI.Box(new Rect(6, (8 + i * 36) - 2, 108, 36), temp.name);
+                // draw a box around the currently selected item
+                GUI.Box(new Rect(6, (8 + i * 36) - 2, 108, 36), "");
+
+                // also redraw it, much larger, in the bottom right
+                GUI.DrawTexture(new Rect(Screen.width - 144, Screen.height - 144, 128, 128), temp.GetImg().texture);
+
+                // now draw a box above the larger item display with the item's name
+                GUI.Box(new Rect(Screen.width - 152, Screen.height - 184, 144, 32), temp.name, centeredText);
             }
+        }
+    }
+
+    // use the currently selected item
+    public void UseSelected()
+    {
+        // only works if the player has at least one item
+        if (!IsEmpty())
+        {
+            inv[selectedItem].GetComponent<HeldItem>().Use();
         }
     }
 }
