@@ -51,8 +51,12 @@ public class HeldItem : MonoBehaviour {
             if (this.projectile != null)
             {
                 // if it does, fire it
-                GameObject p = GameObject.Find("Player");  // get the player object
-                Instantiate(projectile, p.transform.position, p.transform.rotation);
+                GameObject player = GameObject.Find("Player");  // get the player object
+                Transform projTransform = (Transform) Instantiate(projectile, player.transform.position, player.transform.rotation);
+                GameObject proj = projTransform.gameObject;
+
+                // give the new projectile some velocity
+                proj.GetComponent<Rigidbody>().velocity = player.transform.forward * proj.GetComponent<Projectile>().speed;
             }
             cooldown = maxCooldown;
         }
