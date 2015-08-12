@@ -8,6 +8,9 @@ public class GroundItem : MonoBehaviour {
 
 	// the cooldown of this item when picked up and used by the player
     public int cooldown = 60;
+
+    // the projectile that this item fires when used after being picked up
+    public Transform projectile; 
     
     // Use this for initialization
 	void Start () {

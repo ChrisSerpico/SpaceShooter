@@ -43,6 +43,7 @@ public class Inventory : MonoBehaviour {
             GameObject toAdd = new GameObject(i.name);
             toAdd.AddComponent<HeldItem>();
             toAdd.GetComponent<HeldItem>().Initialize(i.GetComponent<SpriteRenderer>().sprite, i.cooldown);
+            toAdd.GetComponent<HeldItem>().projectile = i.projectile;
 
             // add the new item to the inventory
             inv[currentItems] = toAdd;

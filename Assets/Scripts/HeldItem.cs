@@ -13,6 +13,9 @@ public class HeldItem : MonoBehaviour {
     public int maxCooldown;  // the cooldown length itself
     protected int cooldown;
 
+    // the projectile that this item fires when used
+    public Transform projectile;
+
     // initialize this item
     public void Initialize(Sprite image, int cdown)
     {
@@ -37,12 +40,20 @@ public class HeldItem : MonoBehaviour {
     }
 
     // use this item
-    // can be extended by child classes
-    public virtual void Use()
+    // will fire an object if the gameobject has a "gun" component
+    public void Use()
     {
         if (cooldown <= 0)
         {
             Debug.Log("Item \"" + this.name + "\" was used.");
+            
+            // check to see whether this item has a projectile to fire
+            if (this.projectile != null)
+            {
+                // if it does, fire it
+                GameObject p = GameObject.Find("Player");  // get the player object
+                Instantiate(projectile, p.transform.position, p.transform.rotation);
+            }
             cooldown = maxCooldown;
         }
     }
