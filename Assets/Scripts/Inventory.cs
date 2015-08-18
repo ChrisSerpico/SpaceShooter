@@ -15,6 +15,13 @@ public class Inventory : MonoBehaviour {
     // array that holds all the currently held items
     protected GameObject[] inv;
 
+    // default GUI color
+    Color defaultGUI = Color.white; // set to white to avoid errors (Color is non-nullable)
+
+    // GUIStyles for cooldown bar
+    GUIStyle cdBar;
+    GUIStyle cdText;
+
 	// Use this for initialization
 	void Start () 
     {
@@ -92,18 +99,34 @@ public class Inventory : MonoBehaviour {
             return false;
     }
 
+    // use the currently selected item
+    public void UseSelected()
+    {
+        // only works if the player has at least one item
+        if (!IsEmpty())
+        {
+            inv[selectedItem].GetComponent<HeldItem>().Use();
+        }
+    }
+
     // draw items in inventory on screen
     // WARNING: This method currently uses a ton of magic numbers.
     //          Eventually, I'd like to go through it and clean it up,
     //          but for now just consider yourself warned
     void OnGUI()
     {
+        // Get the default color if we haven't already
+        if (defaultGUI == Color.white) defaultGUI = GUI.color;
+
+        // Set up some GUI styles (only if they haven't been already)
+        if (cdBar == null || cdText == null) InitStyles();
+
+        // reset color before doing anything
+        GUI.color = defaultGUI;
+
         // GUIstyle for centering text
         GUIStyle centeredText = GUI.skin.GetStyle("Box");
         centeredText.alignment = TextAnchor.MiddleCenter;
-
-        // Draw a box in the bottom right that shows what item the player has equipped 
-        GUI.Box(new Rect(Screen.width - 152, Screen.height - 152, 144, 144), "");
 
         for (int i = 0; i < currentItems; i++)
         {
@@ -114,6 +137,9 @@ public class Inventory : MonoBehaviour {
             GUI.DrawTexture(new Rect(8, 8 + i * 36, 32, 32), temp.GetImg().texture);
             if (i == selectedItem)
             {
+                // Draw a box in the bottom right that shows what item the player has equipped 
+                GUI.Box(new Rect(Screen.width - 152, Screen.height - 152, 144, 144), "");
+
                 // draw a box around the currently selected item
                 GUI.Box(new Rect(6, (8 + i * 36) - 2, 108, 36), "");
 
@@ -122,17 +148,29 @@ public class Inventory : MonoBehaviour {
 
                 // now draw a box above the larger item display with the item's name
                 GUI.Box(new Rect(Screen.width - 152, Screen.height - 184, 144, 32), temp.name, centeredText);
+
+                // draw a bar to the left of the item image that represents cooldown/ammo (not sure which to use yet)
+                // bar is drawn as a proportion of the currently selected item's cooldown
+                float boxHeight = 144 * (1 - (float)(inv[selectedItem].GetComponent<HeldItem>().GetCooldown()) / (float)(inv[selectedItem].GetComponent<HeldItem>().maxCooldown));
+                GUI.color = Color.red;
+                GUI.Box(new Rect(Screen.width - 168, Screen.height - 152 + (144 - boxHeight), 16, boxHeight), "", cdBar);
+                GUI.color = defaultGUI;
+                GUI.Label(new Rect(Screen.width - 168, Screen.height - 152, 13, 144), "C\no\no\nl\nd\no\nw\nn", cdText);
             }
         }
     }
 
-    // use the currently selected item
-    public void UseSelected()
+    // Initializing GUIStyles for various things
+    protected void InitStyles()
     {
-        // only works if the player has at least one item
-        if (!IsEmpty())
-        {
-            inv[selectedItem].GetComponent<HeldItem>().Use();
-        }
+        // GUI Style for cooldown bar
+        // Just like a button, but with no hover effect
+        cdBar = new GUIStyle(GUI.skin.button);
+        cdBar.hover = GUI.skin.box.hover;
+
+        // GUI Style for cooldown text
+        // Just like a label, but with especially centered text
+        cdText = new GUIStyle(GUI.skin.label);
+        cdText.alignment = TextAnchor.MiddleCenter;
     }
 }

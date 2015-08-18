@@ -39,6 +39,12 @@ public class HeldItem : MonoBehaviour {
         return img;
     }
 
+    // get the cooldown 
+    public int GetCooldown()
+    {
+        return cooldown;
+    }
+
     // use this item
     // will fire an object if the gameobject has a "gun" component
     public void Use()
