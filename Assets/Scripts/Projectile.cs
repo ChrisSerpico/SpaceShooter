@@ -20,7 +20,11 @@ public class Projectile : MonoBehaviour
 
         //Debug.Log("Bullet Collision Detected!");
         
-        // For now, just destroy the bullet. Once health is implemented, decrement health of "other" and then destroy the bullet
+        // Check to see whether the other collider has a health component
+        if (other.GetComponent<Health>() != null)
+        {
+            other.GetComponent<Health>().TakeDamage(damage);
+        }
         Destroy(this.gameObject);
     }
 }
