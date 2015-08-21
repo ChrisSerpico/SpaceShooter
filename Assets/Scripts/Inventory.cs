@@ -124,6 +124,9 @@ public class Inventory : MonoBehaviour {
         // reset color before doing anything
         GUI.color = defaultGUI;
 
+        // used to calculate each item's cooldown bar
+        float cdownPercent;
+
         // GUIstyle for centering text
         GUIStyle centeredText = GUI.skin.GetStyle("Box");
         centeredText.alignment = TextAnchor.MiddleCenter;
@@ -133,8 +136,12 @@ public class Inventory : MonoBehaviour {
             // temporary item variable
             HeldItem temp = inv[i].GetComponent<HeldItem>();
 
+            // calculate how much of this item's cooldown bar should be drawn
+            cdownPercent = (1 - (float)(inv[i].GetComponent<HeldItem>().GetCooldown()) / (float)(inv[i].GetComponent<HeldItem>().maxCooldown));
+
             // draw all items in upper left-hand corner
             GUI.DrawTexture(new Rect(8, 8 + i * 36, 32, 32), temp.GetImg().texture);
+
             if (i == selectedItem)
             {
                 // Draw a box in the bottom right that shows what item the player has equipped 
@@ -151,11 +158,20 @@ public class Inventory : MonoBehaviour {
 
                 // draw a bar to the left of the item image that represents cooldown/ammo (not sure which to use yet)
                 // bar is drawn as a proportion of the currently selected item's cooldown
-                float boxHeight = 144 * (1 - (float)(inv[selectedItem].GetComponent<HeldItem>().GetCooldown()) / (float)(inv[selectedItem].GetComponent<HeldItem>().maxCooldown));
+                float boxHeight = 144 * cdownPercent;
                 GUI.color = Color.red;
                 GUI.Box(new Rect(Screen.width - 168, Screen.height - 152 + (144 - boxHeight), 16, boxHeight), "", cdBar);
                 GUI.color = defaultGUI;
                 GUI.Label(new Rect(Screen.width - 168, Screen.height - 152, 13, 144), "C\no\no\nl\nd\no\nw\nn", cdText);
+            }
+
+            // draw smaller cooldown bars next to the items in the upper left corner
+            // only draw the bar if the item is on cooldown
+            if (cdownPercent < .99)
+            {
+                GUI.color = Color.red;
+                GUI.Box(new Rect(41, (8 + i * 36) + 15, 71 * cdownPercent, 15), "", cdBar);
+                GUI.color = defaultGUI;
             }
         }
     }
