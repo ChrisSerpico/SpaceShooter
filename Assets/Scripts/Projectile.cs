@@ -14,9 +14,9 @@ public class Projectile : MonoBehaviour
     // This code handles how the projectile should act if it collides with something
     void OnTriggerEnter(Collider other)
     {
-        // ignore the collision if the layers of the projectile and the collider are the same
+        // ignore the collision if the layer of the other collider isn't an enemy or an obstacle
         // NOTE: This makes it really important to set layers correctly when making prefabs!
-        if (this.gameObject.layer == other.gameObject.layer) return;
+        if (other.gameObject.layer != LayerMask.NameToLayer("Enemy") && other.gameObject.layer != LayerMask.NameToLayer("Obstacle")) return;
 
         //Debug.Log("Bullet Collision Detected!");
         
