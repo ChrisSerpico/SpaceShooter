@@ -54,7 +54,7 @@ public class AStarPathfinder : MonoBehaviour {
 
         if (currentWaypoint >= path.vectorPath.Count)
         {
-            Debug.Log("End of Path Reached");
+            //Debug.Log("End of Path Reached");
             return;
         }
 
